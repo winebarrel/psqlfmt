@@ -1,0 +1,45 @@
+- name: partition by range
+  input: "create table measurements (id serial, logdate date not null, value numeric) partition by range (logdate)"
+  expected: |
+    CREATE TABLE measurements (
+      id SERIAL,
+      logdate DATE NOT NULL,
+      value NUMERIC
+    ) PARTITION BY RANGE (logdate);
+
+- name: partition of range
+  input: "create table measurements_2024 partition of measurements for values from ('2024-01-01') to ('2025-01-01')"
+  expected: |
+    CREATE TABLE measurements_2024 PARTITION OF measurements FOR VALUES FROM ('2024-01-01') TO ('2025-01-01');
+
+- name: partition by list
+  input: "create table events (id serial, type text, data jsonb) partition by list (type)"
+  expected: |
+    CREATE TABLE events (
+      id SERIAL,
+      type TEXT,
+      data JSONB
+    ) PARTITION BY LIST (type);
+
+- name: partition of list
+  input: "create table events_click partition of events for values in ('click', 'double_click')"
+  expected: |
+    CREATE TABLE events_click PARTITION OF events FOR VALUES IN ('click', 'double_click');
+
+- name: partition by hash
+  input: "create table large_table (id serial, hash_key integer) partition by hash (hash_key)"
+  expected: |
+    CREATE TABLE large_table (
+      id SERIAL,
+      hash_key INTEGER
+    ) PARTITION BY HASH (hash_key);
+
+- name: partition of hash
+  input: "create table large_table_0 partition of large_table for values with (modulus 4, remainder 0)"
+  expected: |
+    CREATE TABLE large_table_0 PARTITION OF large_table FOR VALUES WITH (MODULUS 4, REMAINDER 0);
+
+- name: partition default
+  input: "create table measurements_default partition of measurements default"
+  expected: |
+    CREATE TABLE measurements_default PARTITION OF measurements DEFAULT;

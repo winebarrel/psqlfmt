@@ -1,0 +1,119 @@
+- name: addition
+  input: "select 1 + 2"
+  expected: |
+    SELECT
+      1 + 2;
+
+- name: subtraction
+  input: "select 10 - 3"
+  expected: |
+    SELECT
+      10 - 3;
+
+- name: multiplication
+  input: "select 4 * 5"
+  expected: |
+    SELECT
+      4 * 5;
+
+- name: division
+  input: "select 10 / 3"
+  expected: |
+    SELECT
+      10 / 3;
+
+- name: modulo
+  input: "select 10 % 3"
+  expected: |
+    SELECT
+      10 % 3;
+
+- name: exponentiation
+  input: "select 2 ^ 10"
+  expected: |
+    SELECT
+      2 ^ 10;
+
+- name: string concatenation
+  input: "select 'hello' || ' ' || 'world'"
+  expected: |
+    SELECT
+      'hello' || ' ' || 'world';
+
+- name: unary minus
+  input: "select -1"
+  expected: |
+    SELECT
+      -1;
+
+- name: less than
+  input: "select 1 < 2"
+  expected: |
+    SELECT
+      1 < 2;
+
+- name: greater than
+  input: "select 1 > 2"
+  expected: |
+    SELECT
+      1 > 2;
+
+- name: less than or equal
+  input: "select 1 <= 2"
+  expected: |
+    SELECT
+      1 <= 2;
+
+- name: greater than or equal
+  input: "select 1 >= 2"
+  expected: |
+    SELECT
+      1 >= 2;
+
+- name: not equal
+  input: "select 1 <> 2"
+  expected: |
+    SELECT
+      1 <> 2;
+
+- name: bitwise not
+  input: "select ~1"
+  expected: |
+    SELECT
+      ~1;
+
+- name: bitwise and
+  input: "select 1 & 2"
+  expected: |
+    SELECT
+      1 & 2;
+
+- name: bitwise or
+  input: "select 1 | 2"
+  expected: |
+    SELECT
+      1 | 2;
+
+- name: bitwise shift left
+  input: "select 1 << 2"
+  expected: |
+    SELECT
+      1 << 2;
+
+- name: bitwise shift right
+  input: "select 1 >> 2"
+  expected: |
+    SELECT
+      1 >> 2;
+
+- name: type cast with double colon
+  input: "select 1::text"
+  expected: |
+    SELECT
+      CAST(1 AS TEXT);
+
+- name: type cast string to date
+  input: "select '2024-01-01'::date"
+  expected: |
+    SELECT
+      CAST('2024-01-01' AS DATE);

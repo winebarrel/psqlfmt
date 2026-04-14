@@ -1,0 +1,33 @@
+- name: update
+  input: "update users set name='Jane',email='jane@example.com' where id=1"
+  expected: |
+    UPDATE users
+    SET
+      name = 'Jane',
+      email = 'jane@example.com'
+    WHERE
+      id = 1;
+
+- name: update with from
+  input: "update users set name = 'x' from departments d where users.dept_id = d.id"
+  expected: |
+    UPDATE users
+    SET
+      name = 'x'
+    FROM
+      departments AS d
+    WHERE
+      users.dept_id = d.id;
+
+- name: update with returning
+  input: "update users set name = 'x' from departments d where users.dept_id = d.id returning users.id"
+  expected: |
+    UPDATE users
+    SET
+      name = 'x'
+    FROM
+      departments AS d
+    WHERE
+      users.dept_id = d.id
+    RETURNING
+      users.id;

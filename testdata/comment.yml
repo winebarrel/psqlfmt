@@ -1,0 +1,19 @@
+- name: comment on table
+  input: "comment on table users is 'User accounts'"
+  expected: |
+    COMMENT ON TABLE users IS 'User accounts';
+
+- name: comment on column
+  input: "comment on column users.email is 'Email address'"
+  expected: |
+    COMMENT ON COLUMN users.email IS 'Email address';
+
+- name: comment with single quote
+  input: "comment on table users is 'User''s accounts'"
+  expected: |
+    COMMENT ON TABLE users IS 'User''s accounts';
+
+- name: remove comment
+  input: "comment on table users is null"
+  expected: |
+    COMMENT ON TABLE users IS NULL;

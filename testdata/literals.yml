@@ -1,0 +1,127 @@
+- name: bit string binary
+  input: "select B'1001'"
+  expected: |
+    SELECT
+      B'1001';
+
+- name: bit string hex
+  input: "select X'1FF'"
+  expected: |
+    SELECT
+      X'1FF';
+
+- name: escape string with newline
+  input: "select E'hello\\nworld'"
+  expected: |
+    SELECT
+      E'hello\nworld';
+
+- name: escape string with tab
+  input: "select E'hello\\tworld'"
+  expected: |
+    SELECT
+      E'hello\tworld';
+
+- name: escape string with backslash
+  input: "select E'back\\\\slash'"
+  expected: |
+    SELECT
+      E'back\\slash';
+
+- name: escape string with backspace
+  input: "select E'hello\\bworld'"
+  expected: |
+    SELECT
+      E'hello\bworld';
+
+- name: escape string with formfeed
+  input: "select E'hello\\fworld'"
+  expected: |
+    SELECT
+      E'hello\fworld';
+
+- name: escape string with carriage return
+  input: "select E'hello\\rworld'"
+  expected: |
+    SELECT
+      E'hello\rworld';
+
+- name: escape string octal expanded
+  input: "select E'\\101'"
+  expected: |
+    SELECT
+      'A';
+
+- name: escape string hex expanded
+  input: "select E'\\x41'"
+  expected: |
+    SELECT
+      'A';
+
+- name: escape string unicode expanded
+  input: "select E'\\u0041'"
+  expected: |
+    SELECT
+      'A';
+
+- name: escape string quote
+  input: "select E'it\\'s'"
+  expected: |
+    SELECT
+      'it''s';
+
+- name: collate
+  input: "select 'hello' collate \"C\""
+  expected: |
+    SELECT
+      'hello' COLLATE "C";
+
+- name: array subscript
+  input: "select arr[1] from t"
+  expected: |
+    SELECT
+      arr[1]
+    FROM
+      t;
+
+- name: array slice
+  input: "select arr[1:3] from t"
+  expected: |
+    SELECT
+      arr[1:3]
+    FROM
+      t;
+
+- name: dollar quoting in function
+  input: "create function hello() returns text as $$ select 'hello' $$ language sql"
+  expected: |
+    CREATE FUNCTION hello()
+    RETURNS TEXT
+    LANGUAGE sql
+    AS $$ select 'hello' $$;
+
+- name: schema qualified column
+  input: "select public.users.id from public.users"
+  expected: |
+    SELECT
+      public.users.id
+    FROM
+      public.users;
+
+- name: numeric with decimal
+  input: "select 3.14"
+  expected: |
+    SELECT
+      3.14;
+
+- name: numeric with exponent
+  input: "select 1e10"
+  expected: |
+    SELECT
+      1e10;
+
+- name: null constant
+  input: "select null"
+  expected: |
+    SELECT
+      NULL;

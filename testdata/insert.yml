@@ -1,0 +1,55 @@
+- name: insert with values
+  input: "insert into users (name,email) values ('John','john@example.com')"
+  expected: |
+    INSERT INTO users (name, email)
+    VALUES
+      ('John', 'john@example.com');
+
+- name: insert multiple rows
+  input: "insert into users (name,email) values ('a','a@test.com'),('b','b@test.com')"
+  expected: |
+    INSERT INTO users (name, email)
+    VALUES
+      ('a', 'a@test.com'),
+      ('b', 'b@test.com');
+
+- name: insert with returning
+  input: "insert into users (name,email) values ('a','a@test.com') returning id, name"
+  expected: |
+    INSERT INTO users (name, email)
+    VALUES
+      ('a', 'a@test.com')
+    RETURNING
+      id,
+      name;
+
+- name: insert on conflict do nothing
+  input: "insert into users (name,email) values ('a','a@test.com') on conflict (email) do nothing"
+  expected: |
+    INSERT INTO users (name, email)
+    VALUES
+      ('a', 'a@test.com')
+    ON CONFLICT (email) DO NOTHING;
+
+- name: insert on conflict do update
+  input: "insert into users (name,email) values ('a','a@test.com') on conflict (email) do update set name = excluded.name returning *"
+  expected: |
+    INSERT INTO users (name, email)
+    VALUES
+      ('a', 'a@test.com')
+    ON CONFLICT (email) DO UPDATE SET
+      name = excluded.name
+    RETURNING
+      *;
+
+- name: insert from select
+  input: "insert into archive (id, name) select id, name from users where active = false"
+  expected: |
+    INSERT INTO archive (id, name)
+    SELECT
+      id,
+      name
+    FROM
+      users
+    WHERE
+      active = FALSE;
