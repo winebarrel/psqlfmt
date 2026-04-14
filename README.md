@@ -167,7 +167,3 @@ make build
 ```
 
 Test cases are stored as YAML files under [`testdata/`](./testdata).
-
-## License
-
-[MIT](./LICENSE)
