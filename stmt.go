@@ -177,12 +177,14 @@ func (f *fmter) formatInsert(stmt *pg_query.InsertStmt, depth int) {
 		f.write(" (")
 		for i, col := range stmt.Cols {
 			if i > 0 {
-				f.write(", ")
+				f.write(",")
 			}
+			f.newline(depth + 1)
 			if rt, ok := col.Node.(*pg_query.Node_ResTarget); ok {
 				f.write(quoteIdent(rt.ResTarget.Name))
 			}
 		}
+		f.newline(depth)
 		f.write(")")
 	}
 
