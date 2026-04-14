@@ -351,9 +351,10 @@ func (f *fmter) formatDelete(stmt *pg_query.DeleteStmt, depth int) {
 func (f *fmter) formatCreateTable(stmt *pg_query.CreateStmt, depth int) {
 	f.write("CREATE")
 
-	if stmt.Relation.Relpersistence == "t" {
+	switch stmt.Relation.Relpersistence {
+	case "t":
 		f.write(" TEMPORARY")
-	} else if stmt.Relation.Relpersistence == "u" {
+	case "u":
 		f.write(" UNLOGGED")
 	}
 
@@ -615,9 +616,10 @@ func (f *fmter) formatCreateIndex(stmt *pg_query.IndexStmt, depth int) {
 				f.write(" DESC")
 			}
 
-			if ie.IndexElem.NullsOrdering == pg_query.SortByNulls_SORTBY_NULLS_FIRST {
+			switch ie.IndexElem.NullsOrdering {
+			case pg_query.SortByNulls_SORTBY_NULLS_FIRST:
 				f.write(" NULLS FIRST")
-			} else if ie.IndexElem.NullsOrdering == pg_query.SortByNulls_SORTBY_NULLS_LAST {
+			case pg_query.SortByNulls_SORTBY_NULLS_LAST:
 				f.write(" NULLS LAST")
 			}
 		}
@@ -762,9 +764,10 @@ func (f *fmter) formatTruncate(stmt *pg_query.TruncateStmt, depth int) {
 		f.formatNode(rel, depth)
 	}
 
-	if stmt.Behavior == pg_query.DropBehavior_DROP_CASCADE {
+	switch stmt.Behavior {
+	case pg_query.DropBehavior_DROP_CASCADE:
 		f.write(" CASCADE")
-	} else if stmt.Behavior == pg_query.DropBehavior_DROP_RESTRICT {
+	case pg_query.DropBehavior_DROP_RESTRICT:
 		f.write(" RESTRICT")
 	}
 }

@@ -21,12 +21,12 @@ func quoteIdent(name string) string {
 	needsQuote := false
 	for i, c := range name {
 		if i == 0 {
-			if !((c >= 'a' && c <= 'z') || c == '_') {
+			if (c < 'a' || c > 'z') && c != '_' {
 				needsQuote = true
 				break
 			}
 		} else {
-			if !((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_') {
+			if (c < 'a' || c > 'z') && (c < '0' || c > '9') && c != '_' {
 				needsQuote = true
 				break
 			}
