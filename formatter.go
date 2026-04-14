@@ -34,6 +34,10 @@ func Format(sql string) (string, error) {
 		}
 	}
 
+	if len(results) == 0 {
+		return "", nil
+	}
+
 	return strings.Join(results, ";\n\n") + ";\n", nil
 }
 
