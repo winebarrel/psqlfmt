@@ -106,7 +106,10 @@ SELECT
 FROM
   cte;
 
-INSERT INTO users (name, email)
+INSERT INTO users (
+  name,
+  email
+)
 VALUES
   ('a', 'a@example.com')
 ON CONFLICT (email) DO UPDATE SET
