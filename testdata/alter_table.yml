@@ -1,0 +1,37 @@
+- name: alter table add drop alter column
+  input: "alter table users add column age integer, drop column if exists nickname, alter column name type varchar(100)"
+  expected: |
+    ALTER TABLE users
+      ADD COLUMN age INTEGER,
+      DROP COLUMN IF EXISTS nickname,
+      ALTER COLUMN name TYPE VARCHAR(100);
+
+- name: alter table add foreign key
+  input: "alter table users add constraint fk_dept foreign key (dept_id) references departments (id)"
+  expected: |
+    ALTER TABLE users
+      ADD CONSTRAINT fk_dept FOREIGN KEY (dept_id) REFERENCES departments (id);
+
+- name: alter table set not null
+  input: "alter table users alter column name set not null"
+  expected: |
+    ALTER TABLE users
+      ALTER COLUMN name SET NOT NULL;
+
+- name: alter table set default
+  input: "alter table users alter column name set default 'unknown'"
+  expected: |
+    ALTER TABLE users
+      ALTER COLUMN name SET DEFAULT 'unknown';
+
+- name: alter table drop default
+  input: "alter table users alter column name drop default"
+  expected: |
+    ALTER TABLE users
+      ALTER COLUMN name DROP DEFAULT;
+
+- name: alter table drop constraint cascade
+  input: "alter table users drop constraint if exists fk_dept cascade"
+  expected: |
+    ALTER TABLE users
+      DROP CONSTRAINT IF EXISTS fk_dept CASCADE;

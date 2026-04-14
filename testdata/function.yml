@@ -1,0 +1,45 @@
+- name: create simple function
+  input: "create function add(a integer, b integer) returns integer as $$ select a + b $$ language sql"
+  expected: |
+    CREATE FUNCTION add(a INTEGER, b INTEGER)
+    RETURNS INTEGER
+    LANGUAGE sql
+    AS $$ select a + b $$;
+
+- name: create or replace function with returns table
+  input: "create or replace function get_user(p_id integer) returns table(id integer, name text) as $$ begin return query select u.id, u.name from users u where u.id = p_id; end; $$ language plpgsql"
+  expected: |
+    CREATE OR REPLACE FUNCTION get_user(p_id INTEGER)
+    RETURNS TABLE (id INTEGER, name TEXT)
+    LANGUAGE plpgsql
+    AS $$ begin return query select u.id, u.name from users u where u.id = p_id; end; $$;
+
+- name: create procedure
+  input: "create procedure insert_user(p_name text, p_email text) language sql as $$ insert into users (name, email) values (p_name, p_email) $$"
+  expected: |
+    CREATE PROCEDURE insert_user(p_name TEXT, p_email TEXT)
+    LANGUAGE sql
+    AS $$ insert into users (name, email) values (p_name, p_email) $$;
+
+- name: function with default parameter
+  input: "create function greet(name text default 'world') returns text as $$ select 'hello ' || name $$ language sql"
+  expected: |
+    CREATE FUNCTION greet(name TEXT DEFAULT 'world')
+    RETURNS TEXT
+    LANGUAGE sql
+    AS $$ select 'hello ' || name $$;
+
+- name: function with out parameter
+  input: "create function get_coords(out x integer, out y integer) as $$ select 1, 2 $$ language sql"
+  expected: |
+    CREATE FUNCTION get_coords(OUT x INTEGER, OUT y INTEGER)
+    LANGUAGE sql
+    AS $$ select 1, 2 $$;
+
+- name: function with schema qualified name
+  input: "create function public.add(a integer, b integer) returns integer as $$ select a + b $$ language sql"
+  expected: |
+    CREATE FUNCTION public.add(a INTEGER, b INTEGER)
+    RETURNS INTEGER
+    LANGUAGE sql
+    AS $$ select a + b $$;

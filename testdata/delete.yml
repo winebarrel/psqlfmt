@@ -1,0 +1,29 @@
+- name: delete
+  input: "delete from users where id=1 and active=false"
+  expected: |
+    DELETE FROM users
+    WHERE
+      id = 1
+      AND active = FALSE;
+
+- name: delete with using
+  input: "delete from orders using users where orders.user_id = users.id and users.active = false"
+  expected: |
+    DELETE FROM orders
+    USING
+      users
+    WHERE
+      orders.user_id = users.id
+      AND users.active = FALSE;
+
+- name: delete with returning
+  input: "delete from orders using users where orders.user_id = users.id and users.active = false returning orders.id"
+  expected: |
+    DELETE FROM orders
+    USING
+      users
+    WHERE
+      orders.user_id = users.id
+      AND users.active = FALSE
+    RETURNING
+      orders.id;

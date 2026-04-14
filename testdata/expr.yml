@@ -1,0 +1,165 @@
+- name: like
+  input: "select * from users where name like '%john%'"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      name LIKE '%john%';
+
+- name: ilike
+  input: "select * from users where name ilike '%john%'"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      name ILIKE '%john%';
+
+- name: between
+  input: "select * from users where age between 18 and 65"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      age BETWEEN 18 AND 65;
+
+- name: is null
+  input: "select * from users where deleted_at is null"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      deleted_at IS NULL;
+
+- name: is not null
+  input: "select * from users where name is not null"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      name IS NOT NULL;
+
+- name: cast
+  input: "select cast(id as text) from users"
+  expected: |
+    SELECT
+      CAST(id AS TEXT)
+    FROM
+      users;
+
+- name: array literal
+  input: "select array[1,2,3]"
+  expected: |
+    SELECT
+      ARRAY[1, 2, 3];
+
+- name: coalesce
+  input: "select coalesce(name, 'unknown') from users"
+  expected: |
+    SELECT
+      COALESCE(name, 'unknown')
+    FROM
+      users;
+
+- name: boolean test is true
+  input: "select * from users where active is true"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      active IS TRUE;
+
+- name: not
+  input: "select * from users where not active"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      NOT active;
+
+- name: in list
+  input: "select * from users where id in (1, 2, 3)"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      id IN (1, 2, 3);
+
+- name: not in list
+  input: "select * from users where id not in (1, 2, 3)"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      id NOT IN (1, 2, 3);
+
+- name: any with array
+  input: "select * from users where id = any(array[1,2,3])"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      id = ANY (ARRAY[1, 2, 3]);
+
+- name: nullif
+  input: "select nullif(name, '') from users"
+  expected: |
+    SELECT
+      NULLIF(name, '')
+    FROM
+      users;
+
+- name: is distinct from
+  input: "select * from users where name is distinct from 'john'"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      name IS DISTINCT FROM 'john';
+
+- name: aggregate with distinct
+  input: "select count(distinct status) from users"
+  expected: |
+    SELECT
+      COUNT(DISTINCT status)
+    FROM
+      users;
+
+- name: aggregate with filter
+  input: "select count(*) filter (where active = true) from users"
+  expected: |
+    SELECT
+      COUNT(*) FILTER (WHERE active = TRUE)
+    FROM
+      users;
+
+- name: string with single quote
+  input: "select * from users where name = 'O''Brien'"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      name = 'O''Brien';

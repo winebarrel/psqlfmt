@@ -1,0 +1,43 @@
+- name: create table
+  input: "create table users (id serial primary key, name varchar(255) not null, email text unique)"
+  expected: |
+    CREATE TABLE users (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      email TEXT UNIQUE
+    );
+
+- name: create table if not exists with constraints
+  input: "create table if not exists t (id serial, name text not null, constraint pk primary key (id), constraint uq unique (name))"
+  expected: |
+    CREATE TABLE IF NOT EXISTS t (
+      id SERIAL,
+      name TEXT NOT NULL,
+      CONSTRAINT pk PRIMARY KEY (id),
+      CONSTRAINT uq UNIQUE (name)
+    );
+
+- name: create unique index concurrently
+  input: "create unique index concurrently if not exists idx_email on users (email)"
+  expected: |
+    CREATE UNIQUE INDEX CONCURRENTLY IF NOT EXISTS idx_email ON users (email);
+
+- name: create index with expression
+  input: "create index idx_expr on users (lower(name))"
+  expected: |
+    CREATE INDEX idx_expr ON users (LOWER(name));
+
+- name: drop table cascade
+  input: "drop table if exists users, orders cascade"
+  expected: |
+    DROP TABLE IF EXISTS users, orders CASCADE;
+
+- name: drop index
+  input: "drop index if exists idx_email"
+  expected: |
+    DROP INDEX IF EXISTS idx_email;
+
+- name: truncate cascade
+  input: "truncate table users, orders cascade"
+  expected: |
+    TRUNCATE TABLE users, orders CASCADE;

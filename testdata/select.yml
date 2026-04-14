@@ -1,0 +1,299 @@
+- name: simple select
+  input: "select id,name from users where id=1"
+  expected: |
+    SELECT
+      id,
+      name
+    FROM
+      users
+    WHERE
+      id = 1;
+
+- name: select with join
+  input: "select u.name,o.total from users u join orders o on u.id=o.user_id left join payments p on o.id=p.order_id where u.active=true"
+  expected: |
+    SELECT
+      u.name,
+      o.total
+    FROM
+      users AS u
+      JOIN orders AS o
+        ON u.id = o.user_id
+      LEFT JOIN payments AS p
+        ON o.id = p.order_id
+    WHERE
+      u.active = TRUE;
+
+- name: select with subquery
+  input: "select * from users where id in (select user_id from orders where total > 100)"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      id IN (
+        SELECT
+          user_id
+        FROM
+          orders
+        WHERE
+          total > 100
+      );
+
+- name: CTE
+  input: "with cte as (select id from users where active=true) select * from cte"
+  expected: |
+    WITH
+      cte AS (
+        SELECT
+          id
+        FROM
+          users
+        WHERE
+          active = TRUE
+      )
+    SELECT
+      *
+    FROM
+      cte;
+
+- name: union
+  input: "select id,name from users union all select id,name from admins"
+  expected: |
+    SELECT
+      id,
+      name
+    FROM
+      users
+    UNION ALL
+    SELECT
+      id,
+      name
+    FROM
+      admins;
+
+- name: case expression
+  input: "select case when status=1 then 'active' when status=2 then 'inactive' else 'unknown' end as label from users"
+  expected: |
+    SELECT
+      CASE
+        WHEN status = 1 THEN 'active'
+        WHEN status = 2 THEN 'inactive'
+        ELSE 'unknown'
+      END AS label
+    FROM
+      users;
+
+- name: aggregate with group by and having
+  input: "select department, count(*) as cnt from employees group by department having count(*) > 5 order by cnt desc"
+  expected: |
+    SELECT
+      department,
+      COUNT(*) AS cnt
+    FROM
+      employees
+    GROUP BY
+      department
+    HAVING
+      COUNT(*) > 5
+    ORDER BY
+      cnt DESC;
+
+- name: multiple statements
+  input: "select 1; select 2"
+  expected: |
+    SELECT
+      1;
+
+    SELECT
+      2;
+
+- name: select distinct
+  input: "select distinct u.id, u.name from users u"
+  expected: |
+    SELECT DISTINCT
+      u.id,
+      u.name
+    FROM
+      users AS u;
+
+- name: limit and offset
+  input: "select * from users limit 10 offset 20"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    LIMIT 10
+    OFFSET 20;
+
+- name: for update
+  input: "select * from users for update"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    FOR UPDATE;
+
+- name: window function
+  input: "select row_number() over (partition by dept order by salary desc) as rn, name from employees"
+  expected: |
+    SELECT
+      ROW_NUMBER() OVER (PARTITION BY dept ORDER BY salary DESC) AS rn,
+      name
+    FROM
+      employees;
+
+- name: exists subquery
+  input: "select exists (select 1 from users where id = 1)"
+  expected: |
+    SELECT
+      EXISTS (
+        SELECT
+          1
+        FROM
+          users
+        WHERE
+          id = 1
+      );
+
+- name: parameter references
+  input: "select $1, $2 from users where id = $3"
+  expected: |
+    SELECT
+      $1,
+      $2
+    FROM
+      users
+    WHERE
+      id = $3;
+
+- name: range function
+  input: "select * from generate_series(1, 10) as s"
+  expected: |
+    SELECT
+      *
+    FROM
+      GENERATE_SERIES(1, 10) AS s;
+
+- name: or conditions
+  input: "select * from users where status = 1 or status = 2"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      status = 1
+      OR status = 2;
+
+- name: and with or parenthesized
+  input: "select * from users where (status = 1 or status = 2) and active = true"
+  expected: |
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      (status = 1
+        OR status = 2)
+      AND active = TRUE;
+
+- name: intersect
+  input: "select id from users intersect select id from admins"
+  expected: |
+    SELECT
+      id
+    FROM
+      users
+    INTERSECT
+    SELECT
+      id
+    FROM
+      admins;
+
+- name: except
+  input: "select id from users except select id from banned"
+  expected: |
+    SELECT
+      id
+    FROM
+      users
+    EXCEPT
+    SELECT
+      id
+    FROM
+      banned;
+
+- name: multiple CTEs
+  input: "with a as (select 1 as x), b as (select 2 as y) select * from a, b"
+  expected: |
+    WITH
+      a AS (
+        SELECT
+          1 AS x
+      ),
+      b AS (
+        SELECT
+          2 AS y
+      )
+    SELECT
+      *
+    FROM
+      a,
+      b;
+
+- name: subquery in from
+  input: "select t.id from (select id from users where active = true) as t"
+  expected: |
+    SELECT
+      t.id
+    FROM
+      (
+        SELECT
+          id
+        FROM
+          users
+        WHERE
+          active = TRUE
+      ) AS t;
+
+- name: cross join
+  input: "select * from a cross join b"
+  expected: |
+    SELECT
+      *
+    FROM
+      a
+      CROSS JOIN b;
+
+- name: right join
+  input: "select * from a right join b on a.id = b.id"
+  expected: |
+    SELECT
+      *
+    FROM
+      a
+      RIGHT JOIN b
+        ON a.id = b.id;
+
+- name: full join
+  input: "select * from a full join b on a.id = b.id"
+  expected: |
+    SELECT
+      *
+    FROM
+      a
+      FULL JOIN b
+        ON a.id = b.id;
+
+- name: join using
+  input: "select * from a join b using (id)"
+  expected: |
+    SELECT
+      *
+    FROM
+      a
+      JOIN b USING (id);
