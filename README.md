@@ -1,5 +1,8 @@
 # psqlfmt
 
+[![test](https://github.com/winebarrel/psqlfmt/actions/workflows/test.yml/badge.svg)](https://github.com/winebarrel/psqlfmt/actions/workflows/test.yml)
+[![AI Generated](https://img.shields.io/badge/AI%20Generated-Claude-orange?logo=anthropic)](https://claude.ai/claude-code)
+
 `psqlfmt` is a PostgreSQL SQL formatter. It parses SQL with `pg_query_go` and rewrites `SELECT`, `INSERT`, `UPDATE`, `DELETE`, and various DDL statements into a consistent multi-line format.
 
 It can be used both as a CLI and as a Go package.
