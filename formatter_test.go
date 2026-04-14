@@ -40,3 +40,54 @@ func TestFormat(t *testing.T) {
 		}
 	}
 }
+
+func TestFormat_Error(t *testing.T) {
+	tests := []struct {
+		name  string
+		input string
+	}{
+		{
+			name:  "syntax error",
+			input: "select from where",
+		},
+		{
+			name:  "not sql",
+			input: "this is not sql at all",
+		},
+		{
+			name:  "unclosed parenthesis",
+			input: "select (1 + 2",
+		},
+		{
+			name:  "unclosed string",
+			input: "select 'hello",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := psqlfmt.Format(tt.input)
+			assert.Error(t, err)
+		})
+	}
+}
+
+func TestFormat_Empty(t *testing.T) {
+	tests := []struct {
+		name  string
+		input string
+	}{
+		{name: "empty string", input: ""},
+		{name: "whitespace only", input: "   \n\t  "},
+		{name: "semicolon only", input: ";"},
+		{name: "multiple semicolons", input: ";;;"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := psqlfmt.Format(tt.input)
+			require.NoError(t, err)
+			assert.Equal(t, "", result)
+		})
+	}
+}
