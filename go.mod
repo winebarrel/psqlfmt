@@ -1,6 +1,6 @@
 module github.com/winebarrel/psqlfmt
 
-go 1.26.1
+go 1.25
 
 require (
 	github.com/pganalyze/pg_query_go/v6 v6.2.2
